@@ -1,15 +1,14 @@
-import AddFormCard from "./components/AddFormCard";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
 import { FormInput } from "lucide-react";
-
-import FormDropDown from "./components/FormDropDown";
-import useFetchAllForms from "./hooks/useFetchAllForms";
-import { APP_PATHS } from "@/lib/configs/router-config/constants";
 import { NavLink } from "react-router-dom";
-import { cn } from "@/lib/utils";
+
 import PageSpecificBar from "@/components/layout/PageSpecificBar";
 import { Skeleton } from "@/components/ui/skeleton";
+import { APP_PATHS } from "@/lib/configs/router-config/constants";
+import { cn } from "@/lib/utils";
+
+import AddFormCard from "./components/AddFormCard";
+import FormDropDown from "./components/FormDropDown";
+import useFetchAllForms from "./hooks/useFetchAllForms";
 
 const PageNavLinks = {
   [APP_PATHS.Dashboard]: [
@@ -25,11 +24,7 @@ const PageNavLinks = {
 };
 
 const Dashboard = () => {
-  const { formDetails, isLoading } = useSelector(
-    (store: RootState) => store.builder
-  );
-
-  useFetchAllForms();
+  const [forms, loading] = useFetchAllForms();
 
   return (
     <section className="flex flex-row">
@@ -53,7 +48,7 @@ const Dashboard = () => {
         </PageSpecificBar>
       </div>
       <div className="flex flex-wrap gap-y-6 p-8">
-        {isLoading &&
+        {loading &&
           Array.from({ length: 3 }).map((_, index) => (
             <div
               key={index}
@@ -62,9 +57,12 @@ const Dashboard = () => {
               <Skeleton className="w-[100px] h-[20px] rounded-full bg-zinc-300" />
             </div>
           ))}
-        {formDetails.map((formDetail) => (
+        {forms?.map((formDetail) => (
           <FormDropDown key={formDetail.id} formDetail={formDetail}>
-            <div className="flex items-center justify-center rounded-sm w-[180px] h-[210px] bg-zinc-100 transition-all border-2 border-spacing-4  cursor-pointer hover:border-zinc-700 hover:shadow-md mr-4">
+            <div
+              tabIndex={0}
+              className="flex items-center justify-center rounded-sm w-[180px] h-[210px] bg-zinc-100 transition-all border-2 border-spacing-4  cursor-pointer hover:border-zinc-700 hover:shadow-md mr-4"
+            >
               <div className="flex flex-col items-center">
                 <FormInput className="w-8 h-8" />
                 <div className="px-2 text-center">{formDetail.displayName}</div>

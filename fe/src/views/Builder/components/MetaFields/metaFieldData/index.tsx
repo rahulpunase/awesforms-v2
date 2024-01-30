@@ -154,22 +154,29 @@ const defaultFieldData: DefaultFieldData = {
       isDisabled: false,
       isVisible: true,
       isRequired: true,
-      inputs: [
-        {
-          initialValue: "",
+      inputs: {
+        firstName: {
           inputType: "text",
+          isRequired: true,
+          isVisible: true,
           label: "First Name",
-          placeholderText: "",
-          inputName: "firstName",
+          name: "firstName",
         },
-        {
-          initialValue: "",
+        lastName: {
           inputType: "text",
+          isRequired: true,
+          isVisible: true,
           label: "Last Name",
-          placeholderText: "",
-          inputName: "lastName",
+          name: "lastName",
         },
-      ],
+        middleName: {
+          inputType: "text",
+          isRequired: true,
+          isVisible: true,
+          label: "Middle Name",
+          name: "middleName",
+        },
+      },
     },
   },
 };

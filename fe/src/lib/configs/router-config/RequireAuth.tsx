@@ -1,6 +1,6 @@
 import { LoaderIcon } from "lucide-react";
 import { useSelector } from "react-redux";
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 import MainLayout from "@/components/layout/MainLayout";
 import { RootState } from "@/store/store";
@@ -11,7 +11,6 @@ const RequireAuth = () => {
   const { profile, isProfileFetching } = useSelector(
     (store: RootState) => store.profile
   );
-  // const location = useLocation();
 
   if (isProfileFetching) {
     return (

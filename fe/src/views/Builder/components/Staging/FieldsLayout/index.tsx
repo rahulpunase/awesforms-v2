@@ -2,6 +2,8 @@ import { KnownFieldConfig, MetaFieldType, UnknownFieldConfig } from "@/models";
 
 import AddressFieldLayout from "./AddressFieldLayout";
 import MultiLineFieldLayout from "./MultiLineFieldLayout";
+import NameFieldLayout from "./NameFieldLayout";
+import NumberFieldLayout from "./NumberFieldLayout";
 import SingleLineFieldLayout from "./SingleLineFieldLayout";
 
 const FieldsLayout = ({
@@ -40,6 +42,26 @@ const FieldsLayout = ({
         selectedFieldTempId={selectedFieldTempId}
         tempId={tempId}
         config={config as KnownFieldConfig<"ADDRESS">}
+      />
+    );
+  }
+
+  if (type === "NUMBER") {
+    return (
+      <NumberFieldLayout
+        selectedFieldTempId={selectedFieldTempId}
+        tempId={tempId}
+        config={config as KnownFieldConfig<"NUMBER">}
+      />
+    );
+  }
+
+  if (type === "NAME") {
+    return (
+      <NameFieldLayout
+        selectedFieldTempId={selectedFieldTempId}
+        tempId={tempId}
+        config={config as KnownFieldConfig<"NAME">}
       />
     );
   }

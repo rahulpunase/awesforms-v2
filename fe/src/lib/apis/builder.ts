@@ -1,11 +1,8 @@
-import {
-  CreateFormResponse,
-  FormDetails,
-  FormDetailsResponse,
-  FormPages,
-} from "@/models";
-import httpClient from "./httpClient";
 import qs from "query-string";
+
+import { CreateFormResponse, FormDetailsResponse, FormPages } from "@/models";
+
+import httpClient from "./httpClient";
 
 export type CreateFormDetailsPayload = {
   name: string;

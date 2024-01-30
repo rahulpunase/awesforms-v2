@@ -9,10 +9,11 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useModal } from "@/lib/hooks/useModal";
+import { FormDetails } from "@/models";
 import { RootState } from "@/store/store";
 
 const FormPreviewModal = () => {
-  const { onClose } = useModal();
+  const { onClose, data } = useModal();
   const { selectedForm } = useSelector((store: RootState) => store.builder);
 
   return (
@@ -26,7 +27,7 @@ const FormPreviewModal = () => {
         <DialogDescription className="text-center">
           {selectedForm?.description}
         </DialogDescription>
-        <ActualForm />
+        <ActualForm formDetails={data as FormDetails} />
       </DialogContent>
     </Dialog>
   );

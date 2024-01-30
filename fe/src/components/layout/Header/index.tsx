@@ -1,8 +1,9 @@
+import { lazy, Suspense } from "react";
 import { useLocation } from "react-router-dom";
 
 import { APP_PATHS } from "@/lib/configs/router-config/constants";
 
-import BuilderHeaderContent from "./BuilderHeaderContent";
+const BuilderHeaderContent = lazy(() => import("./BuilderHeaderContent"));
 
 const HIDE_HEADER_FROM = [APP_PATHS.AboutYourSelf];
 
@@ -31,7 +32,7 @@ const Header = () => {
         <div className="flex items-center text-2xl">
           {ROUTE_NAME_MAPPING[pathToMatch]}
         </div>
-        {renderChildrenAsPerRoute()}
+        <Suspense>{renderChildrenAsPerRoute()}</Suspense>
       </div>
     </header>
   );

@@ -10,19 +10,14 @@ import {
   ToUpdateConfig,
 } from "@/models";
 
-import {
-  createForm,
-  fetchAllForms,
-  fetchFormFromFormId,
-  updateFormDetails,
-} from "./builder.thunk";
+import { fetchFormFromFormId, updateFormDetails } from "./builder.thunk";
 
-const initialState: BuilderSliceInitialState = {
+export const initialState: BuilderSliceInitialState = {
   isLoading: true,
-  formDetails: [],
   selectedForm: null,
   selectedTempId: "",
   isFormUpdateSaving: false,
+  selectedTempIdToDelete: "",
 };
 
 const BuilderSlice = createSlice({
@@ -44,9 +39,17 @@ const BuilderSlice = createSlice({
       };
     },
 
-    addFieldToSelectedForm: (state, action: PayloadAction<OptionalField>) => {
+    addFieldToSelectedForm: (
+      state,
+      action: PayloadAction<{
+        field: OptionalField;
+        indexToAdd: number;
+      }>
+    ) => {
       if (!state.selectedForm) return;
-      const field = JSON.parse(JSON.stringify(action.payload)) as OptionalField;
+      const field = JSON.parse(
+        JSON.stringify(action.payload.field)
+      ) as OptionalField;
       field.tempId = uuidv4();
       const selectedPage = state.selectedForm.pages.find(
         (page) => page.isSelected
@@ -54,7 +57,11 @@ const BuilderSlice = createSlice({
       if (!selectedPage) {
         return;
       }
-      selectedPage.fields.push(field);
+      if (!selectedPage.fields.length) {
+        selectedPage.fields.push(field);
+        return;
+      }
+      selectedPage.fields.splice(action.payload.indexToAdd + 1, 0, field);
     },
 
     setSelectedTempId: (state, action: PayloadAction<string>) => {
@@ -146,12 +153,7 @@ const BuilderSlice = createSlice({
       } as KnownFieldConfig<"ADDRESS">;
     },
 
-    deleteField: (
-      state: BuilderSliceInitialState,
-      action: PayloadAction<{
-        tempId: string;
-      }>
-    ) => {
+    deleteField: (state: BuilderSliceInitialState) => {
       const selectedPage = state.selectedForm?.pages.find(
         (page) => page.isSelected
       );
@@ -159,30 +161,28 @@ const BuilderSlice = createSlice({
         return;
       }
       const indexToDelete = selectedPage.fields.findIndex(
-        (field) => field.tempId === action.payload.tempId
+        (field) => field.tempId === state.selectedTempIdToDelete
       );
 
       selectedPage.fields.splice(indexToDelete, 1);
+      state.selectedTempIdToDelete = "";
+    },
+
+    setForDelete: (
+      state: BuilderSliceInitialState,
+      action: PayloadAction<{
+        tempId: string;
+      }>
+    ) => {
+      state.selectedTempIdToDelete = action.payload.tempId;
+    },
+
+    unSetForDelete: (state: BuilderSliceInitialState) => {
+      state.selectedTempIdToDelete = "";
     },
   },
 
   extraReducers: (builder) => {
-    builder.addCase(fetchAllForms.pending, (state) => {
-      state.isLoading = true;
-    });
-    builder.addCase(fetchAllForms.fulfilled, (state, action) => {
-      state.isLoading = false;
-      state.formDetails = action.payload.formDetails;
-    });
-
-    builder.addCase(createForm.pending, (state) => {
-      state.isLoading = true;
-    });
-    builder.addCase(createForm.fulfilled, (state, action) => {
-      state.isLoading = false;
-      state.formDetails = [...state.formDetails, action.payload.form];
-    });
-
     builder.addCase(fetchFormFromFormId.pending, (state) => {
       state.isLoading = true;
     });
@@ -190,6 +190,19 @@ const BuilderSlice = createSlice({
     builder.addCase(fetchFormFromFormId.fulfilled, (state, action) => {
       state.isLoading = false;
       state.selectedForm = action.payload.form;
+      if (!action.payload.form?.pages?.length) {
+        state.selectedForm = {
+          ...state.selectedForm,
+          pages: [
+            {
+              isVisible: true,
+              isSelected: true,
+              fields: [],
+              pageNumber: 1,
+            },
+          ],
+        };
+      }
     });
 
     builder.addCase(updateFormDetails.pending, (state) => {
@@ -203,7 +216,7 @@ const BuilderSlice = createSlice({
   },
 });
 
-export default BuilderSlice.reducer;
+export default BuilderSlice;
 
 export const {
   addPageToSelectedForm,
@@ -213,4 +226,6 @@ export const {
   updateAddressInputElements,
   updateAddressConfig,
   deleteField,
+  setForDelete,
+  unSetForDelete,
 } = BuilderSlice.actions;

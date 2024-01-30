@@ -7,7 +7,6 @@ const BooleanConfigEditor = ({
   onChange: (checked: boolean) => void;
   label: string;
 }) => {
-  console.log({ initialValue });
   return (
     <div className="flex flex-col  mt-6">
       <div className="mb-1">

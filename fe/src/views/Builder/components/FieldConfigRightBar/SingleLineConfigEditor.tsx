@@ -2,9 +2,9 @@ import { useDispatch } from "react-redux";
 
 import { Separator } from "@/components/ui/separator";
 import { ConfigEditorProps } from "@/models";
-import { updateSingleLineConfig } from "@/store/slice/builder/builder.slice";
 import { AppDispatch } from "@/store/store";
 
+import { updateSingleLineConfig } from "../../store/builder/builder.slice";
 import BooleanConfigEditor from "./components/BooleanConfigEditor";
 import CharacterLimitEditor from "./components/CharacterLimitEditor";
 import InitialValueEditor from "./components/InitialValueEditor";

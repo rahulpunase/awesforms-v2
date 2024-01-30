@@ -8,7 +8,7 @@ import {
   AdditionalAddressInputsKeys,
   KnownFieldConfig,
 } from "@/models";
-import { updateAddressInputElements } from "@/store/slice/builder/builder.slice";
+import { updateAddressInputElements } from "@/views/Builder/store/builder/builder.slice";
 
 const FieldEditor = ({
   field,

@@ -1,4 +1,5 @@
 import { UserProfileResponse } from "@/models";
+
 import httpClient from "./httpClient";
 
 export type GetProfilePayload = {

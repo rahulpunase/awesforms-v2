@@ -1,4 +1,5 @@
-import { Tabs, TabsContent, TabsTrigger, TabsList } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 import BasicFields from "./BasicFields";
 const FieldTabs = () => {
   return (

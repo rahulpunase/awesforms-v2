@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { setStore } from "./lib/apis/httpClient";
 import { RouterConfigWrapper } from "./lib/configs/router-config";
 import { APP_PATHS } from "./lib/configs/router-config/constants";
-import { store } from "./store/store";
+import store from "./store/store";
 
 function App() {
   const navigate = useNavigate();

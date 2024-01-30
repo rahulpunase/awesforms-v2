@@ -5,6 +5,7 @@ export const APP_NAMES = {
   Dashboard: "dashboard",
   SharedForm: "shared-form",
   Builder: "builder",
+  Form: "form",
 };
 export const APP_PATHS: Record<keyof typeof APP_NAMES, string> = {
   SignIn: `/${APP_NAMES.SignIn}`,
@@ -13,4 +14,5 @@ export const APP_PATHS: Record<keyof typeof APP_NAMES, string> = {
   Dashboard: `/${APP_NAMES.Dashboard}`,
   SharedForm: `/${APP_NAMES.Dashboard}/${APP_NAMES.SharedForm}`,
   Builder: `/${APP_NAMES.Builder}`,
+  Form: "/",
 };

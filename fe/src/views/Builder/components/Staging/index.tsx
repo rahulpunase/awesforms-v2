@@ -1,32 +1,18 @@
-import { useDrop } from "react-dnd";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
-import { DraggableAndDroppableItems } from "@/models";
-import { addFieldToSelectedForm } from "@/store/slice/builder/builder.slice";
-import { AppDispatch, RootState } from "@/store/store";
-
-import { defaultFieldData } from "../MetaFields/metaFieldData";
+import {
+  selectIsBuilderLoading,
+  selectSelectedForm,
+  selectSelectedTempId,
+} from "../../store/builder/builder.selectors";
 import MetaFieldsDroppableContainer from "./MetaFieldsDroppableContainer";
 
 const StatingArea = () => {
-  const { selectedForm, isLoading, selectedTempId } = useSelector(
-    (store: RootState) => store.builder
-  );
+  const selectedForm = useSelector(selectSelectedForm);
+  const selectedTempId = useSelector(selectSelectedTempId);
+  const isBuilderLoading = useSelector(selectIsBuilderLoading);
 
-  const dispatch = useDispatch<AppDispatch>();
-
-  const [collectedProps, dropRef] = useDrop(() => ({
-    accept: "meta-fields",
-    drop: (item: DraggableAndDroppableItems) => {
-      const fieldDefault = defaultFieldData[item.id];
-      dispatch(addFieldToSelectedForm(fieldDefault));
-    },
-    collect: (monitor) => ({
-      isOver: monitor.isOver(),
-    }),
-  }));
-
-  if (isLoading || !selectedForm) {
+  if (isBuilderLoading || !selectedForm) {
     return <div />;
   }
 
@@ -37,7 +23,7 @@ const StatingArea = () => {
           <div className="text-3xl">{selectedForm.displayName}</div>
           <div className="text-zinc-500 mt-1">{selectedForm.description}</div>
         </div>
-        <div ref={dropRef} className="pt-4 flex-grow">
+        <div className="pt-4 flex-grow">
           <MetaFieldsDroppableContainer
             selectedFieldTempId={selectedTempId}
             selectedForm={selectedForm}

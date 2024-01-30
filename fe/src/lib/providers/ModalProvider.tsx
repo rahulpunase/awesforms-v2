@@ -1,25 +1,32 @@
-import React, { PropsWithChildren, useState } from "react";
+import React, { lazy, PropsWithChildren, Suspense, useState } from "react";
 
-import AddFormModal from "@/components/layout/modals/AddFormModal";
-import FormPreviewModal from "@/components/layout/modals/FormPreviewModal";
+const LazyLoadedAddFormModal = lazy(
+  () => import("@/components/layout/modals/AddFormModal")
+);
+const LazyFormPreviewModal = lazy(
+  () => import("@/components/layout/modals/FormPreviewModal")
+);
+const LazyPublishFormModal = lazy(
+  () => import("@/components/layout/modals/PublishFormModal")
+);
 
 export type ModalDefault = {
   modal: Modals;
   data?: object;
 };
 
-type Modals = "" | "create-form" | "preview-form";
+type Modals = "" | "create-form" | "preview-form" | "publish-form";
 
 type ModalState = {
   modal: Modals;
-  data?: object;
+  data?: unknown;
 };
 
 export type ModalContext = {
   modal: Modals;
-  data?: object;
+  data?: unknown;
   onClose: () => void;
-  onOpen: (modal: Modals, data?: object) => void;
+  onOpen: (modal: Modals, data?: unknown) => void;
 };
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -36,7 +43,7 @@ const ModalProvider: React.FC<PropsWithChildren> = ({ children }) => {
     data: {},
   });
 
-  const onOpen = (modal: Modals, data?: object) => {
+  const onOpen = (modal: Modals, data?: unknown) => {
     setModalState({
       modal,
       data,
@@ -60,8 +67,11 @@ const ModalProvider: React.FC<PropsWithChildren> = ({ children }) => {
       }}
     >
       {children}
-      {modalState.modal === "create-form" && <AddFormModal />}
-      {modalState.modal === "preview-form" && <FormPreviewModal />}
+      <Suspense>
+        {modalState.modal === "create-form" && <LazyLoadedAddFormModal />}
+        {modalState.modal === "preview-form" && <LazyFormPreviewModal />}
+        {modalState.modal === "publish-form" && <LazyPublishFormModal />}
+      </Suspense>
     </modalContext.Provider>
   );
 };

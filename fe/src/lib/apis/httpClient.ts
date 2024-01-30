@@ -1,5 +1,6 @@
-import { AppStore } from "@/store/store";
 import axios from "axios";
+
+import { AppStore } from "@/store/store";
 
 let _store: AppStore | null = null;
 const setStore = (store: AppStore) => {

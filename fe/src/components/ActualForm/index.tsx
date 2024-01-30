@@ -1,16 +1,12 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { error } from "console";
 import { useForm } from "react-hook-form";
-import { useSelector } from "react-redux";
 
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
-import { RootState } from "@/store/store";
+import { FormDetails } from "@/models";
 
 import ActualFormField from "./ActualFormField";
-const ActualForm = () => {
-  const { selectedForm } = useSelector((store: RootState) => store.builder);
-  const fields = selectedForm?.pages[0].fields;
+const ActualForm = ({ formDetails }: { formDetails: FormDetails }) => {
+  const fields = formDetails?.pages[0].fields;
 
   const form = useForm();
 
@@ -18,8 +14,9 @@ const ActualForm = () => {
     console.log("val", values);
   };
 
-  console.log("Error", form.formState.errors);
-
+  if (!formDetails) {
+    return <div>No Form Provided</div>;
+  }
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>

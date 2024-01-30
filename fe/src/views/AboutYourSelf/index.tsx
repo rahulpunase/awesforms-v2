@@ -1,3 +1,10 @@
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import * as z from "zod";
+
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -8,16 +15,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useNavigate } from "react-router-dom";
-import { updateOrganization } from "@/store/slice/profile/profile.thunk";
-
-import { AppDispatch, RootState } from "@/store/store";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
-import * as z from "zod";
 import { APP_PATHS } from "@/lib/configs/router-config/constants";
-import { useEffect } from "react";
+import { updateOrganization } from "@/store/slice/profile/profile.thunk";
+import { AppDispatch, RootState } from "@/store/store";
 
 const formSchema = z.object({
   orgName: z.string().min(1, {

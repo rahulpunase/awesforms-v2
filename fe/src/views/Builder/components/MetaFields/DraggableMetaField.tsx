@@ -1,11 +1,12 @@
-import { cn } from "@/lib/utils";
-import { MetaFieldBase } from "@/models";
 import { useDrag } from "react-dnd";
+
+import { cn } from "@/lib/utils";
+import { DnDActions, DnDItemTypes, MetaFieldBase } from "@/models";
 
 const DraggableMetaField = ({ field }: { field: MetaFieldBase }) => {
   const [collected, drag, dragPreview] = useDrag(() => ({
-    type: "meta-fields",
-    item: { id: field.type },
+    type: DnDItemTypes.sideBarMetaFields,
+    item: { action: DnDActions.dropping, id: field.type },
     collect: (monitor) => {
       return {
         isDragging: monitor.isDragging(),
@@ -13,7 +14,7 @@ const DraggableMetaField = ({ field }: { field: MetaFieldBase }) => {
       };
     },
   }));
-  // console.log(collected.canDrop);
+
   return (
     <div
       ref={drag}

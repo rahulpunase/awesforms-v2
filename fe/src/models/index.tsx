@@ -23,6 +23,7 @@ export type ProfileSliceInitialState = {
   isLoading: boolean;
   profile: Profile | null;
   userId: string;
+  forms: FormDetails[];
 };
 
 export type FormDetailsResponse = {
@@ -35,10 +36,10 @@ export type CreateFormResponse = {
 
 export type BuilderSliceInitialState = {
   isLoading: boolean;
-  formDetails: FormDetails[];
   selectedForm: FormDetails | null;
   selectedTempId: string;
   isFormUpdateSaving: boolean;
+  selectedTempIdToDelete: string;
 };
 
 export type MetaFieldType =
@@ -55,10 +56,6 @@ export type Field = {
 
 export type MetaFieldBase = Field & {
   Icon: LucideIcon;
-};
-
-export type DraggableAndDroppableItems = {
-  id: MetaFieldType;
 };
 
 export type MetaFields = MetaFieldBase[];
@@ -94,13 +91,27 @@ type MultiLineFieldConfig = {
   initialValue: string;
 } & CommonInputFieldConfig;
 
+type AdditionalNameInputsConfig = {
+  label: string;
+  isRequired: boolean;
+  name: string;
+  isVisible: boolean;
+  inputType: string;
+};
+
+type AdditionalNameInputs = {
+  firstName: AdditionalNameInputsConfig;
+  middleName: AdditionalNameInputsConfig;
+  lastName: AdditionalNameInputsConfig;
+};
+
 type NameFieldConfiguration = {
   label: string;
   instruction: string;
   isVisible: boolean;
   isDisabled: boolean;
   isRequired: boolean;
-  inputs: AdditionalInput[];
+  inputs: AdditionalNameInputs;
 };
 
 export type AdditionalAddressInputsConfig = {
@@ -207,3 +218,17 @@ export type ConfigEditorProps<T> = {
   config: KnownFieldConfig<T>;
   tempId: string;
 };
+
+export type DraggableAndDroppableItems = {
+  action: DnDActions;
+  id: MetaFieldType | string;
+};
+
+export enum DnDItemTypes {
+  sideBarMetaFields = "SIDE_BAR_META_FIELDS",
+}
+
+export enum DnDActions {
+  dropping = "Dropping",
+  sorting = "Sorting",
+}

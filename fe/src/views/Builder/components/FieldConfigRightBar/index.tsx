@@ -2,19 +2,33 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { KnownFieldConfig, OptionalField } from "@/models";
-import { setSelectedTempId } from "@/store/slice/builder/builder.slice";
-import { updateFormDetails } from "@/store/slice/builder/builder.thunk";
-import { AppDispatch, RootState } from "@/store/store";
+import { AppDispatch } from "@/store/store";
 
+import {
+  selectIsFormUpdateSaving,
+  selectSelectedForm,
+  selectSelectedTempId,
+} from "../../store/builder/builder.selectors";
+import { setSelectedTempId } from "../../store/builder/builder.slice";
+import { updateFormDetails } from "../../store/builder/builder.thunk";
 import AddressConfigEditor from "./AddressConfigEditor";
 import SingleLineConfigEditor from "./SingleLineConfigEditor";
 
 const FieldConfigRightBar = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { selectedForm, selectedTempId, isFormUpdateSaving } = useSelector(
-    (store: RootState) => store.builder
-  );
+
+  const selectedForm = useSelector(selectSelectedForm);
+  const selectedTempId = useSelector(selectSelectedTempId);
+  const isFormUpdateSaving = useSelector(selectIsFormUpdateSaving);
 
   const selectedPage = selectedForm?.pages?.find((page) => page.isSelected);
 
@@ -65,11 +79,16 @@ const FieldConfigRightBar = () => {
   };
 
   return (
-    <div className="bg-zinc-100 border-l right-0  border-zinc-500 h-full top-0 w-[380px] shrink-0 fixed">
-      <div className="mt-[82px] h-full flex flex-col">
-        <div className="font-semibold text-xl border-b pb-2 mb-2 p-4">
-          Configure {field?.displayName}
-        </div>
+    <Sheet
+      open={!!selectedTempId}
+      onOpenChange={() => dispatch(setSelectedTempId(""))}
+    >
+      <SheetContent className="p-4">
+        <SheetHeader>
+          <div className="font-semibold text-xl border-b p-4 shadow-sm">
+            Configure {field?.displayName}
+          </div>
+        </SheetHeader>
         <ScrollArea className="flex-grow mb-[64px]">
           {renderConfigType()}
         </ScrollArea>
@@ -90,8 +109,8 @@ const FieldConfigRightBar = () => {
             </Button>
           </div>
         )}
-      </div>
-    </div>
+      </SheetContent>
+    </Sheet>
   );
 };
 

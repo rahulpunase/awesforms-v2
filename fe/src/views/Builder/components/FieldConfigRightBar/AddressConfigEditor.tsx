@@ -2,9 +2,9 @@ import { useDispatch } from "react-redux";
 
 import { Separator } from "@/components/ui/separator";
 import { ConfigEditorProps } from "@/models";
-import { updateAddressConfig } from "@/store/slice/builder/builder.slice";
 import { AppDispatch } from "@/store/store";
 
+import { updateAddressConfig } from "../../store/builder/builder.slice";
 import AddressInputsEditor from "./components/AddressInputsEditor";
 import InstructionEditor from "./components/InstructionEditor";
 import LabelEditor from "./components/LabelEditor";

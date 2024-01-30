@@ -2,13 +2,19 @@ import { createSlice } from "@reduxjs/toolkit";
 
 import { ProfileSliceInitialState } from "@/models";
 
-import { fetchProfile, updateOrganization } from "./profile.thunk";
+import {
+  createForm,
+  fetchAllForms,
+  fetchProfile,
+  updateOrganization,
+} from "./profile.thunk";
 
-const initialState: ProfileSliceInitialState = {
+export const initialState: ProfileSliceInitialState = {
   isProfileFetching: true,
   isLoading: true,
   profile: null,
   userId: "",
+  forms: [],
 };
 const ProfileSlice = createSlice({
   initialState: initialState,
@@ -26,6 +32,22 @@ const ProfileSlice = createSlice({
     builder.addCase(fetchProfile.fulfilled, (state, action) => {
       state.profile = action.payload.profile;
       state.isProfileFetching = false;
+    });
+
+    builder.addCase(fetchAllForms.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(fetchAllForms.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.forms = action.payload.formDetails;
+    });
+
+    builder.addCase(createForm.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(createForm.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.forms = [...state.forms, action.payload.form];
     });
     // builder.addCase(fetchProfile.rejected, (state) => {
     //   console.log("rejected...");

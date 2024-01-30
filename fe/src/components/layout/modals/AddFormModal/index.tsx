@@ -16,7 +16,7 @@ import {
 import { Form, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useModal } from "@/lib/hooks/useModal";
-import { createForm } from "@/store/slice/builder/builder.thunk";
+import { createForm } from "@/store/slice/profile/profile.thunk";
 import { AppDispatch, RootState } from "@/store/store";
 
 import FormTypeField from "./FormTypeField";
