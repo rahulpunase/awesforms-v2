@@ -1,0 +1,112 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Profile {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  name      String
+  imageUrl  String
+  email     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  profileOrgRelation ProfileOrgRelation[]
+  FormDetails        FormDetails[]
+}
+
+enum OrganizationType {
+  IT
+  PUBLIC
+  SERVICE
+  MEDICAL
+  DEFENCE
+  INDIVIDUAL
+  OTHER
+}
+
+enum OrganizationMemberRole {
+  ADMIN
+  GUEST
+  MODERATOR
+}
+
+model ProfileOrgRelation {
+  id             String                 @id @default(uuid())
+  role           OrganizationMemberRole @default(ADMIN)
+  Profile        Profile?               @relation(fields: [profileId], references: [id])
+  profileId      String?
+  Organization   Organization?          @relation(fields: [organizationId], references: [id])
+  organizationId String?
+
+  @@index([profileId])
+  @@index([organizationId])
+}
+
+model Organization {
+  id                 String               @id @default(uuid())
+  type               OrganizationType     @default(OTHER)
+  name               String
+  imageUrl           String
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+  profileOrgRelation ProfileOrgRelation[]
+  FormDetails        FormDetails[]
+}
+
+enum TypeBoolean {
+  true
+  false
+}
+
+enum FormType {
+  CARD
+  STANDARD
+}
+
+enum FormFieldType {
+  SINGLE_LINE
+  MULTI_LINE
+  NUMBER
+  NAME
+  ADDRESS
+  EMAIL
+  PHONE
+}
+
+enum FormFieldInputType {
+  text
+  select
+  date
+  number
+}
+
+enum InputCase {
+  system
+  upper
+  lower
+}
+
+model FormDetails {
+  id               String        @id @default(uuid())
+  displayName      String
+  description      String
+  isDeleted        TypeBoolean   @default(false)
+  isDeployed       TypeBoolean   @default(false)
+  isShared         TypeBoolean   @default(false)
+  type             FormType      @default(STANDARD)
+  saveButtonLabel  String?
+  resetButtonLabel String?
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  Profile          Profile?      @relation(fields: [profileId], references: [id])
+  profileId        String?
+  Organization     Organization? @relation(fields: [organizationId], references: [id])
+  organizationId   String?
+  pages            Json?
+}
